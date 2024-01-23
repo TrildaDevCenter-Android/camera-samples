@@ -19,6 +19,7 @@ package com.example.camerax_mlkit
 import android.content.Intent
 import android.graphics.Rect
 import android.net.Uri
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -34,11 +35,16 @@ class QrCodeViewModel(barcode: Barcode) {
     var boundingRect: Rect = barcode.boundingBox!!
     var qrContent: String = ""
     var qrCodeTouchCallback = { v: View, e: MotionEvent -> false} //no-op
+    var qrTypedContent: String = ""
 
     init {
         when (barcode.valueType) {
             Barcode.TYPE_URL -> {
                 qrContent = barcode.url!!.url!!
+                qrTypedContent =  "TYPE_URL" + " " + qrContent
+
+                Log.i("toto", qrTypedContent)
+
                 qrCodeTouchCallback = { v: View, e: MotionEvent ->
                     if (e.action == MotionEvent.ACTION_DOWN && boundingRect.contains(e.getX().toInt(), e.getY().toInt())) {
                         val openBrowserIntent = Intent(Intent.ACTION_VIEW)
@@ -48,6 +54,95 @@ class QrCodeViewModel(barcode: Barcode) {
                     true // return true from the callback to signify the event was handled
                 }
             }
+
+            Barcode.TYPE_CALENDAR_EVENT -> {
+                qrContent = barcode.rawValue.toString()
+                qrTypedContent =  "TYPE_CALENDAR_EVENT" + " " + qrContent
+                Log.i("toto", qrTypedContent)
+            }
+
+            Barcode.TYPE_CONTACT_INFO -> {
+                qrContent = barcode.rawValue.toString()
+                qrTypedContent =  "TYPE_CONTACT_INFO" + " " + qrContent
+
+                Log.i("toto", qrTypedContent)
+            }
+
+            Barcode.TYPE_DRIVER_LICENSE -> {
+                qrContent = barcode.rawValue.toString()
+                qrTypedContent =  "TYPE_DRIVER_LICENSE" + " " + qrContent
+                Log.i("toto", qrTypedContent)
+            }
+
+            Barcode.TYPE_EMAIL -> {
+                qrContent = barcode.rawValue.toString()
+                qrTypedContent =  "TYPE_EMAIL" + " " + qrContent
+                Log.i("toto", qrTypedContent)
+
+            }
+
+            Barcode.TYPE_ISBN ->{
+
+                qrContent = barcode.rawValue.toString()
+                qrTypedContent =  "TYPE_ISBN" + " " + qrContent
+
+                Log.i("toto", qrTypedContent)
+
+                qrCodeTouchCallback = { v: View, e: MotionEvent ->
+                    if (e.action == MotionEvent.ACTION_DOWN && boundingRect.contains(e.getX().toInt(), e.getY().toInt())) {
+                        val openBrowserIntent = Intent(Intent.ACTION_VIEW)
+
+
+                        openBrowserIntent.data = Uri.Builder()
+                            .scheme("https")
+                            .authority("www.google.com")
+                            .appendPath("search")
+                            .appendQueryParameter("q", qrContent)
+                            .build()
+
+                        v.context.startActivity(openBrowserIntent)
+                    }
+                    true // return true from the callback to signify the event was handled
+                }
+            }
+
+            Barcode.TYPE_PHONE ->{
+                qrContent = barcode.rawValue.toString()
+                qrTypedContent =  "TYPE_PHONE" + " " + qrContent
+                Log.i("toto", qrTypedContent)
+            }
+
+            Barcode.TYPE_PRODUCT ->{
+                qrContent = barcode.rawValue.toString()
+                qrTypedContent =  "TYPE_PRODUCT" + " " + qrContent
+                Log.i("toto", qrTypedContent)
+            }
+
+            Barcode.TYPE_SMS->{
+                qrContent = barcode.rawValue.toString()
+                qrTypedContent =  "TYPE_SMS" + " " + qrContent
+                Log.i("toto", qrTypedContent)
+            }
+
+            Barcode.TYPE_GEO ->{
+                qrContent = barcode.rawValue.toString()
+                qrTypedContent =  "TYPE_GEO" + " " + qrContent
+                Log.i("toto", qrTypedContent)
+
+            }
+
+            Barcode.TYPE_TEXT ->{
+                qrContent = barcode.rawValue.toString()
+                qrTypedContent =  "TYPE_TEXT" + " " + qrContent
+                Log.i("toto", qrTypedContent)
+            }
+
+            Barcode.TYPE_WIFI ->{
+                qrContent = barcode.rawValue.toString()
+                qrTypedContent =  "TYPE_WIFI" + " " + qrContent
+                Log.i("toto", qrTypedContent)
+            }
+
             // Add other QR Code types here to handle other types of data,
             // like Wifi credentials.
             else -> {

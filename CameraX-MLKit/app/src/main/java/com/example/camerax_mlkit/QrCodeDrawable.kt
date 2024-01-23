@@ -49,7 +49,7 @@ class QrCodeDrawable(qrCodeViewModel: QrCodeViewModel) : Drawable() {
 
     private val qrCodeViewModel = qrCodeViewModel
     private val contentPadding = 25
-    private var textWidth = contentTextPaint.measureText(qrCodeViewModel.qrContent).toInt()
+    private var textWidth = contentTextPaint.measureText(qrCodeViewModel.qrTypedContent).toInt()
 
     override fun draw(canvas: Canvas) {
         canvas.drawRect(qrCodeViewModel.boundingRect, boundingRectPaint)
@@ -62,7 +62,7 @@ class QrCodeDrawable(qrCodeViewModel: QrCodeViewModel) : Drawable() {
             contentRectPaint
         )
         canvas.drawText(
-            qrCodeViewModel.qrContent,
+            qrCodeViewModel.qrTypedContent,
             (qrCodeViewModel.boundingRect.left + contentPadding).toFloat(),
             (qrCodeViewModel.boundingRect.bottom + contentPadding*2).toFloat(),
             contentTextPaint
